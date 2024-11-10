@@ -19,6 +19,7 @@ public:
 
 public slots:
     void toggleThemeMode();
+    QIcon icon(const QString& name, const QColor& color = QColor());
 
 private:
     Theme m_theme;
