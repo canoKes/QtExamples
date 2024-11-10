@@ -1,0 +1,21 @@
+# Format Style Options - Created with Clang Power Tools
+---
+BasedOnStyle: Google
+AccessModifierOffset: -4
+AlignOperands: DontAlign
+ColumnLimit: 0
+IndentWidth: 4
+FixNamespaceComments: false
+NamespaceIndentation: All
+DerivePointerAlignment: false
+AllowShortCaseLabelsOnASingleLine: true
+PointerAlignment: Left
+BreakBeforeBraces: Custom
+BraceWrapping:
+    BeforeElse: true
+AlignAfterOpenBracket: DontAlign
+ContinuationIndentWidth: 4
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+BreakConstructorInitializers: BeforeComma
+IndentPPDirectives: BeforeHash
+AllowShortIfStatementsOnASingleLine: Never
