@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <QtInstallerDir>$(QtDir)\..\..\Tools\QtInstallerFramework\4.8\bin\</QtInstallerDir>
+    <QtBinaryCreator>$(QtInstallerDir)binarycreator.exe</QtBinaryCreator>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="QtInstallerDir">
+      <Value>$(QtInstallerDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QtBinaryCreator">
+      <Value>$(QtBinaryCreator)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package>
+  <DisplayName>Core</DisplayName>
+  <Description>Core Application</Description>
+  <Version>0.1.0</Version>
+  <ReleaseDate>2024-11-12</ReleaseDate>
+  <Name>core</Name>
+  <Licenses>
+    <License name="License Agreement" file="license.txt" />
+  </Licenses>
+  <Default>true</Default>
+  <ForcedInstallation>true</ForcedInstallation>
+  <ForcedUpdate>true</ForcedUpdate>
+  <Essential>true</Essential>
+</Package>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Installer>
+  <Name>Example App</Name>
+  <Version>1.0.0</Version>
+  <Title>Example App Setup</Title>
+  <Publisher>Can Keskinsoy</Publisher>
+  <ProductUrl>https://github.com/canoKes/QtExamples</ProductUrl>
+  <TargetDir>@ApplicationsDir@/ExampleApp</TargetDir>
+  <StartMenuDir>Example Application</StartMenuDir>
+  <MaintenanceToolName>Uninstall</MaintenanceToolName>
+</Installer>

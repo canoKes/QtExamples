@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <PropertyGroup Label="QtSettings">
+    <QtDeploy>true</QtDeploy>
+    <QtDeployDebugRelease>release</QtDeployDebugRelease>
+    <QtDeployNoPatchQt>true</QtDeployNoPatchQt>
+    <QtDeployNoQuickImport>true</QtDeployNoQuickImport>
+    <QtDeployNoSystemD3dCompiler>true</QtDeployNoSystemD3dCompiler>
+    <QtDeployNoVirtualKeyboard>true</QtDeployNoVirtualKeyboard>
+    <QtDeployCompilerRuntime>skip</QtDeployCompilerRuntime>
+    <QtDeployNoOpenglSw>true</QtDeployNoOpenglSw>
+    <QtDeployIncludeModules>$(QtModules);$(QtDeployIncludeModules)</QtDeployIncludeModules>
+    <QtDeployForce>true</QtDeployForce>
+    <QtDeployCopyFiles>true</QtDeployCopyFiles>
+    <QtDeployDir>@(_-->'$(SolutionDir)Build\Installer\packages\$(ProjectName)\data\')</QtDeployDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup />
+</Project>
