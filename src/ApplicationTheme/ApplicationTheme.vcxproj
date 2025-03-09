@@ -95,11 +95,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="ListView.cpp" />
+    <ClCompile Include="ListViewDelegate.cpp" />
+    <ClCompile Include="ListViewModel.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Theme.cpp" />
     <ClCompile Include="Toast.cpp" />
     <QtRcc Include="resource.qrc" />
+    <QtUic Include="ListView.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
@@ -122,6 +126,15 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Toast.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="ListView.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="ListViewModel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="ListViewDelegate.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
