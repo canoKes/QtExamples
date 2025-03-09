@@ -20,7 +20,6 @@ Qt::ColorScheme Application::colorScheme() const {
 void Application::setColorScheme(Qt::ColorScheme scheme) {
     styleHints()->setColorScheme(scheme);
     Logger::info(this) << "changed color scheme:" << scheme;
-    m_theme.update();
 }
 
 void Application::toggleColorScheme() {

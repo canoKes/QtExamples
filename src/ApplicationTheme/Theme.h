@@ -3,6 +3,7 @@
 #include <QHash>
 #include <QIcon>
 #include <QObject>
+#include <QPalette>
 #include <QSet>
 
 class IconEngine;
@@ -16,11 +17,7 @@ public:
 
 public:
     QIcon icon(const QString& name);
-    const QByteArray iconContent(const QString& name) const;
-    void update();
-
-private slots:
-    void updateIconEngines();
+    const QByteArray iconContent(const QString& name, QPalette::ColorRole role = QPalette::Text, QPalette::ColorGroup group = QPalette::Normal) const;
 
 private:
     QSet<IconEngine*> m_iconEngines;

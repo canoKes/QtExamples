@@ -4,7 +4,6 @@
 #include <QFile>
 #include <QIconEngine>
 #include <QPainter>
-#include <QPalette>
 #include <QRegularExpression>
 #include <QSvgRenderer>
 
@@ -53,22 +52,10 @@ QIcon Theme::icon(const QString& name) {
     return QIcon(engine);
 }
 
-const QByteArray Theme::iconContent(const QString& name) const {
-    return m_iconContentMap.value(name);
-}
-
-void Theme::update() {
-    Logger::info(this) << "update icon engines";
-    updateIconEngines();
-}
-
-void Theme::updateIconEngines() {
-    const QColor color = qApp->palette().text().color();
-    QHashIterator<QString, QByteArray> iterator(m_iconContentMap);
-    while (iterator.hasNext()) {
-        const auto& key = iterator.next().key();
-        updateSvgColors(m_iconContentMap[key], color);
-    }
+const QByteArray Theme::iconContent(const QString& name, QPalette::ColorRole role, QPalette::ColorGroup group) const {
+    QByteArray content = m_iconContentMap.value(name);
+    updateSvgColors(content, qApp->palette().color(group, role));
+    return content;
 }
 
 void updateSvgColors(QByteArray& content, const QColor& color) {
@@ -94,7 +81,22 @@ void IconEngine::paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, Q
         return;
     }
 
-    QSvgRenderer renderer(m_theme->iconContent(m_name));
+    QPalette::ColorRole role = QPalette::Text;
+    QPalette::ColorGroup group = QPalette::Normal;
+    switch (mode) {
+        case QIcon::Disabled:
+            group = QPalette::Disabled;
+            break;
+        case QIcon::Active:
+        case QIcon::Selected:
+            role = QPalette::Highlight;
+            group = QPalette::ColorGroup::Active;
+            break;
+        default:
+            break;
+    }
+
+    QSvgRenderer renderer(m_theme->iconContent(m_name, role, group));
     renderer.render(painter, rect);
 }
 

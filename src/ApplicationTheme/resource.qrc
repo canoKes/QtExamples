@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/icons">
         <file alias="wrench">icons/wrench.svg</file>
+        <file alias="pencil">icons/pencil.svg</file>
+        <file alias="plus">icons/plus.svg</file>
+        <file alias="trash">icons/trash.svg</file>
     </qresource>
 </RCC>
