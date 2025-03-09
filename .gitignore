@@ -1,6 +1,6 @@
 # Root Directories
 .vs
-build
+[Bb]uild
 
 # Visual Studio Files
 *.user

@@ -52,6 +52,9 @@
     <ClCompile Include="Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Toast.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Theme.h">
@@ -64,6 +67,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Toast.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

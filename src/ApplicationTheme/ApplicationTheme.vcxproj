@@ -98,6 +98,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Theme.cpp" />
+    <ClCompile Include="Toast.cpp" />
     <QtRcc Include="resource.qrc" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
@@ -118,6 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Settings.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Toast.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -11,6 +11,9 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() = default;
 
+private slots:
+    void onThemeTriggered();
+
 private:
     Ui::MainWindowClass ui;
 };

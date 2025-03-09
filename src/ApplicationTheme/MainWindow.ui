@@ -30,14 +30,14 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="toggleColorSchemeAction"/>
+   <addaction name="toggleThemeAction"/>
   </widget>
-  <action name="toggleColorSchemeAction">
+  <action name="toggleThemeAction">
    <property name="text">
-    <string>Toggle Color Scheme</string>
+    <string>Toggle Theme</string>
    </property>
    <property name="toolTip">
-    <string>Toggle Color Scheme</string>
+    <string>Toggle Theme</string>
    </property>
   </action>
  </widget>
