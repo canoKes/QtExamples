@@ -3,14 +3,11 @@
 #include <QApplication>
 #include <QFile>
 #include <QIconEngine>
-#include <QMetaEnum>
 #include <QPainter>
 #include <QPalette>
 #include <QRegularExpression>
-#include <QStyleHints>
 #include <QSvgRenderer>
 
-#include "Application.h"
 #include "Logger.h"
 
 static void updateSvgColors(QByteArray& content, const QColor& color);
@@ -30,21 +27,14 @@ private:
 };
 
 Theme::Theme(QObject* parent)
-    : QObject(parent)
-    , m_mode(Mode::Light) {
-    const auto styleHints = App->styleHints();
-    connect(styleHints, &QStyleHints::colorSchemeChanged, this, &Theme::setColorScheme);
-    setColorScheme(styleHints->colorScheme());
+    : QObject(parent) {
 }
 
-Theme::Mode Theme::mode() const {
-    return m_mode;
-}
-
-QIcon Theme::icon(const QString& name, const QColor& color) {
+QIcon Theme::icon(const QString& name) {
     const auto resource = QString(":/icons/%1").arg(name);
 
     if (!m_iconContentMap.contains(name)) {
+        Logger::info(this) << "caching icon content for:" << name;
         QFile file(resource);
         if (!file.open(QFile::ReadOnly)) {
             return QIcon();
@@ -53,6 +43,9 @@ QIcon Theme::icon(const QString& name, const QColor& color) {
         auto content = file.readAll();
         updateSvgColors(content, qApp->palette().text().color());
         m_iconContentMap.insert(name, content);
+    }
+    else {
+        Logger::info(this) << "load icon content form cache:" << name;
     }
 
     auto engine = new IconEngine(this, name);
@@ -64,32 +57,9 @@ const QByteArray Theme::iconContent(const QString& name) const {
     return m_iconContentMap.value(name);
 }
 
-void Theme::setMode(Mode mode) {
-    const auto scheme = mode == Mode::Dark
-        ? Qt::ColorScheme::Dark
-        : Qt::ColorScheme::Light;
-
-    App->styleHints()->setColorScheme(scheme);
+void Theme::update() {
+    Logger::info(this) << "update icon engines";
     updateIconEngines();
-}
-
-void Theme::toggleMode() {
-    setMode(m_mode == Mode::Light ? Mode::Dark : Mode::Light);
-}
-
-void Theme::setColorScheme(Qt::ColorScheme colorScheme) {
-    const auto mode = colorScheme == Qt::ColorScheme::Dark
-        ? Theme::Mode::Dark
-        : Theme::Mode::Light;
-
-    if (m_mode == mode) {
-        return;
-    }
-
-    m_mode = mode;
-
-    Logger::info() << "theme mode changed:" << mode;
-    emit modeChanged(m_mode);
 }
 
 void Theme::updateIconEngines() {
@@ -116,7 +86,7 @@ IconEngine::IconEngine(Theme* theme, const QString& name)
     : QIconEngine()
     , m_theme(theme)
     , m_name(name) {
-    Logger::info() << "IconEngine created: " << m_name;
+    Logger::info() << "[IconEngine] created:" << m_name;
 }
 
 void IconEngine::paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) {

@@ -17,9 +17,13 @@ public:
     explicit Application(int& argc, char** argv);
     ~Application() = default;
 
+public:
+    QIcon icon(const QString& name);
+    Qt::ColorScheme colorScheme() const;
+
 public slots:
-    void toggleThemeMode();
-    QIcon icon(const QString& name, const QColor& color = QColor());
+    void setColorScheme(Qt::ColorScheme scheme);
+    void toggleColorScheme();
 
 private:
     Theme m_theme;

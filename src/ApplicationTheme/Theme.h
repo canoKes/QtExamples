@@ -11,36 +11,18 @@ class Theme : public QObject {
     Q_OBJECT
 
 public:
-    enum class Mode {
-        Light,
-        Dark,
-    };
-    Q_ENUM(Mode)
-
-signals:
-    void modeChanged(Mode mode);
-
-public:
     explicit Theme(QObject* parent = nullptr);
     ~Theme() = default;
 
 public:
-    Mode mode() const;
-    QIcon icon(const QString& name, const QColor& color = QColor());
+    QIcon icon(const QString& name);
     const QByteArray iconContent(const QString& name) const;
-
-public slots:
-    void setMode(Mode mode);
-    void toggleMode();
+    void update();
 
 private slots:
-    void setColorScheme(Qt::ColorScheme colorScheme);
-
-private:
     void updateIconEngines();
 
 private:
-    Mode m_mode;
     QSet<IconEngine*> m_iconEngines;
     QHash<QString, QByteArray> m_iconContentMap;
 };

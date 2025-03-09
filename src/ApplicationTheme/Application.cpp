@@ -1,19 +1,29 @@
 #include "Application.h"
 
 #include <QPalette>
+#include <QStyleHints>
+
+#include "Logger.h"
 
 Application::Application(int& argc, char** argv)
     : QApplication(argc, argv) {
 }
 
-void Application::toggleThemeMode() {
-    m_theme.toggleMode();
+QIcon Application::icon(const QString& name) {
+    return m_theme.icon(name);
 }
 
-QIcon Application::icon(const QString& name, const QColor& color) {
-    if (!color.isValid()) {
-        return m_theme.icon(name, palette().color(QPalette::Text));
-    }
+Qt::ColorScheme Application::colorScheme() const {
+    return styleHints()->colorScheme();
+}
 
-    return m_theme.icon(name, color);
+void Application::setColorScheme(Qt::ColorScheme scheme) {
+    styleHints()->setColorScheme(scheme);
+    Logger::info(this) << "changed color scheme:" << scheme;
+    m_theme.update();
+}
+
+void Application::toggleColorScheme() {
+    const auto scheme = colorScheme() == Qt::ColorScheme::Light ? Qt::ColorScheme::Dark : Qt::ColorScheme::Light;
+    setColorScheme(scheme);
 }

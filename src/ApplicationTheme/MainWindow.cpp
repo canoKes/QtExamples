@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui.actionToggleThemeMode->setIcon(App->icon("wrench"));
 
-    connect(ui.actionToggleThemeMode, &QAction::triggered, App, &Application::toggleThemeMode);
+    App->icon("wrench");
+
+    connect(ui.actionToggleThemeMode, &QAction::triggered, App, &Application::toggleColorScheme);
     connect(ui.actionQuit, &QAction::triggered, App, &Application::quit);
 }
