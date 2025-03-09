@@ -6,16 +6,24 @@
 #include <QMouseEvent>
 #include <QScreen>
 
+#include "Logger.h"
+
 Toast::Toast(const QString& message, QWidget* parent)
     : Toast(message, 3, parent) {
 }
 
 Toast::Toast(const QString& message, int durationSeconds, QWidget* parent)
-    : QFrame(parent) {
-    setAttribute(Qt::WA_TranslucentBackground);
+    : QFrame(parent)
+    , m_defaultPalette(qApp->palette()) {
+    Logger::debug(this) << "created" << this;
+
     setAttribute(Qt::WA_DeleteOnClose);
-    setAutoFillBackground(false);
-    setFrameShape(QFrame::StyledPanel);
+    setAutoFillBackground(true);
+    setFrameShape(QFrame::NoFrame);
+    setFrameShadow(QFrame::Plain);
+
+    m_defaultPalette.setColor(QPalette::Window, m_defaultPalette.color(QPalette::Midlight));
+    setPalette(m_defaultPalette);
 
     if (parent) {
         setWindowFlags(Qt::FramelessWindowHint);
@@ -32,6 +40,10 @@ Toast::Toast(const QString& message, int durationSeconds, QWidget* parent)
 
     m_timer.setInterval(qMin(durationSeconds * 1000, 3000));
     connect(&m_timer, &QTimer::timeout, this, &Toast::close);
+}
+
+Toast::~Toast() {
+    Logger::debug(this) << "deleted" << this;
 }
 
 bool Toast::eventFilter(QObject* watched, QEvent* event) {
@@ -51,13 +63,14 @@ bool Toast::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void Toast::enterEvent(QEnterEvent* event) {
-    QPalette palette;
-    palette.setBrush(QPalette::Base, palette.brush(QPalette::Highlight));
+    QPalette palette = m_defaultPalette;
+    palette.setColor(QPalette::ColorRole::Window, palette.color(QPalette::Highlight));
+    palette.setColor(QPalette::ColorRole::WindowText, palette.color(QPalette::HighlightedText));
     setPalette(palette);
 }
 
 void Toast::leaveEvent(QEvent* event) {
-    setPalette(QPalette());
+    setPalette(m_defaultPalette);
 }
 
 void Toast::mousePressEvent(QMouseEvent* event) {

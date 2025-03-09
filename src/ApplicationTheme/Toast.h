@@ -13,7 +13,7 @@ signals:
 public:
     explicit Toast(const QString& message, QWidget* parent = nullptr);
     explicit Toast(const QString& message, int durationSeconds, QWidget* parent = nullptr);
-    ~Toast() = default;
+    ~Toast();
 
 public:
     virtual bool eventFilter(QObject* watched, QEvent* event) override;
@@ -29,4 +29,5 @@ private:
 
 private:
     QTimer m_timer;
+    QPalette m_defaultPalette;
 };
