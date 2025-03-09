@@ -5,6 +5,7 @@
 #include <QIconEngine>
 #include <QMetaEnum>
 #include <QPainter>
+#include <QPalette>
 #include <QRegularExpression>
 #include <QStyleHints>
 #include <QSvgRenderer>
@@ -16,7 +17,7 @@ static void updateSvgColors(QByteArray& content, const QColor& color);
 
 class IconEngine : public QIconEngine {
 public:
-    IconEngine(const QByteArray& content, const QColor& color = QColor());
+    IconEngine(Theme* theme, const QString& name);
 
 public:
     void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
@@ -24,12 +25,8 @@ public:
     QIconEngine* clone() const override;
 
 private:
-    void update(const QColor& color);
-
-private:
-    QByteArray m_template;
-    QByteArray m_content;
-    QColor m_color;
+    Theme* m_theme;
+    QString m_name;
 };
 
 Theme::Theme(QObject* parent)
@@ -44,23 +41,27 @@ Theme::Mode Theme::mode() const {
     return m_mode;
 }
 
-QIcon Theme::icon(const QString& name, const QColor& color) const {
-    const auto meta = QMetaEnum::fromType<Mode>();
-    const auto modeName = meta.valueToKey((int)m_mode);
-    const auto key = QString("%1_%2").arg(modeName, name);
+QIcon Theme::icon(const QString& name, const QColor& color) {
     const auto resource = QString(":/icons/%1").arg(name);
 
-    auto engine = m_iconEngineMap.value(key, nullptr);
-    if (!engine) {
+    if (!m_iconContentMap.contains(name)) {
         QFile file(resource);
         if (!file.open(QFile::ReadOnly)) {
             return QIcon();
         }
-        engine = new IconEngine(file.readAll(), color);
-        m_iconEngineMap.insert(key, engine);
+
+        auto content = file.readAll();
+        updateSvgColors(content, qApp->palette().text().color());
+        m_iconContentMap.insert(name, content);
     }
 
+    auto engine = new IconEngine(this, name);
+    m_iconEngines.insert(engine);
     return QIcon(engine);
+}
+
+const QByteArray Theme::iconContent(const QString& name) const {
+    return m_iconContentMap.value(name);
 }
 
 void Theme::setMode(Mode mode) {
@@ -69,6 +70,7 @@ void Theme::setMode(Mode mode) {
         : Qt::ColorScheme::Light;
 
     App->styleHints()->setColorScheme(scheme);
+    updateIconEngines();
 }
 
 void Theme::toggleMode() {
@@ -90,6 +92,15 @@ void Theme::setColorScheme(Qt::ColorScheme colorScheme) {
     emit modeChanged(m_mode);
 }
 
+void Theme::updateIconEngines() {
+    const QColor color = qApp->palette().text().color();
+    QHashIterator<QString, QByteArray> iterator(m_iconContentMap);
+    while (iterator.hasNext()) {
+        const auto& key = iterator.next().key();
+        updateSvgColors(m_iconContentMap[key], color);
+    }
+}
+
 void updateSvgColors(QByteArray& content, const QColor& color) {
     QRegularExpression pattern("fill=\"(#[0-9A-Fa-f]+)\"");
     auto result = pattern.match(content);
@@ -101,15 +112,19 @@ void updateSvgColors(QByteArray& content, const QColor& color) {
     }
 }
 
-IconEngine::IconEngine(const QByteArray& content, const QColor& color)
+IconEngine::IconEngine(Theme* theme, const QString& name)
     : QIconEngine()
-    , m_template(content)
-    , m_color(color) {
-    update(m_color);
+    , m_theme(theme)
+    , m_name(name) {
+    Logger::info() << "IconEngine created: " << m_name;
 }
 
 void IconEngine::paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) {
-    QSvgRenderer renderer(m_content);
+    if (!m_theme) {
+        return;
+    }
+
+    QSvgRenderer renderer(m_theme->iconContent(m_name));
     renderer.render(painter, rect);
 }
 
@@ -128,9 +143,4 @@ QPixmap IconEngine::pixmap(const QSize& size, QIcon::Mode mode, QIcon::State sta
 
 QIconEngine* IconEngine::clone() const {
     return new IconEngine(*this);
-}
-
-void IconEngine::update(const QColor& color) {
-    m_content = m_template;
-    updateSvgColors(m_content, m_color);
 }
